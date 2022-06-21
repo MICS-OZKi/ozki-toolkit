@@ -1,0 +1,27 @@
+{
+  "name": "@vkl-main/generator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/proof-generator/src/index.js",
+  "types": "./dist/proof-generator/src/index.d.ts",
+  "type": "module",
+  "exports": {
+    "./src/*": "./dist/proof-generator/src/*.js"
+  },
+  "typesVersions": {
+    "*": {
+      "src/*": [
+        "./dist/proof-generator/src/*"
+      ]
+    }
+  },
+  "scripts": {
+    "tsc": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "typescript": "^4.7.2"
+  },
+  "author": "",
+  "license": "ISC"
+}

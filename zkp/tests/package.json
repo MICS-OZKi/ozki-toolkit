@@ -1,0 +1,33 @@
+{
+  "name": "a-ha",
+  "version": "1.0.0",
+  "description": "test",
+  "main": "a-ha.js",
+  "scripts": {
+    "setup": "npm install; npm run zkbuild",
+    "generate_is_subscription_good": "../zkbuild.sh is_subscription_good.circom;",
+    "zkbuild": "../zkbuild.sh eddsa_test.circom; ../zkbuild.sh multiplier2_test.circom; ../zkbuild.sh babypbk_test.circom; ../zkbuild.sh poseidon_test.circom",
+    "build": "tsc -p tsconfig.json",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "eddsa_test": "node build/eddsa_test.js",
+    "babypbk_test": "node build/babypbk_test.js",
+    "multiplier2_test": "node build/multiplier2_test.js",
+    "poseidon_test": "node build/poseidon_test.js",
+    "strcmp_test": "node build/strcmp_test.js",
+    "GetStringBytes": "node build/GetStringBytes.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "snarkjs": "^0.4.18",
+    "typescript": "^4.7.2"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.1",
+    "@types/node": "^17.0.35",
+    "chai": "^4.3.6",
+    "circomlibjs": "^0.1.2",
+    "ffjavascript": "^0.2.54",
+    "path": "^0.12.7"
+  }
+}

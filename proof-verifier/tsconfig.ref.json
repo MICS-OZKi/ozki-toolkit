@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+  },
+  "include": ["src/**/*"],
+  "exclude": ["**/*.spec.ts"],
+  "references": [
+    { "path": "../common/tsconfig.ref.json" }
+  ]
+}

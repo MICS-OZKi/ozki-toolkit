@@ -1,0 +1,30 @@
+{
+  "files": [
+    "index.ts"
+  ],
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "outDir": ".",
+    "rootDir": ".",
+    "baseUrl": ".",
+    "declaration": true,
+    "strict": true,
+  },
+  "references": [
+    {
+      "path": "./common/tsconfig.ref.json"
+    },
+    {
+      "path": "./proof-verifier/tsconfig.ref.json"
+    },
+    {
+      "path": "./proof-generator/tsconfig.ref.json"
+    }
+  ],
+  "include": ["./dist/proof-generator/src/**/*", "./dist/proof-verifier/src/**/*", "./dist/common/src/**/*"],
+  "exclude": ["node_modules"]
+}
+

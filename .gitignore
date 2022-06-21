@@ -1,0 +1,11 @@
+zkp/*.zkey
+*.ptau
+zkp/**/verification_key.json
+*_cpp/
+*_js/
+*.out/
+*.r1cs
+*.sym
+node_modules/
+build/
+dist/
