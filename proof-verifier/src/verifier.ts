@@ -39,12 +39,21 @@ class Verifier {
     );
     */
 
-    console.log("#### groth16.verify...");
-    let res = await snarkjs.groth16.verify(
+    console.log("#### calling groth16.verify...");
+    let res;
+    try {
+      res = await snarkjs.groth16.verify(
       verificationKey,
       publicSignals,
       proof
-    );
+      );
+    }
+    catch (error) {
+      console.log("#### groth16.verify failed");
+      console.log(error);
+      throw Error("Proof verification failed");
+    }
+
     if (res) {
       // fail the proof if it's older than maxProoAge
       const [paymentStatus, timeStamp] = publicSignals;

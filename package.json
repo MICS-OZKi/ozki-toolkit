@@ -18,10 +18,11 @@
     "@ozki-lib/common"
   ],
   "scripts": {
-    "clean": "rm -rf ./dist && rm -rf ./index.js && rm -rf ./index.d.ts",
+    "clean": "rm -rf ./dist && rm -rf ./index.js && rm -rf ./index.d.ts & rm -f *.tgz",
     "build": "tsc --build",
     "copy": "cp -r proof-generator/static/ ./dist/proof-generator/static && cp -r proof-verifier/static/ ./dist/proof-verifier/static",
-    "prepare": "npm run clean && npm run build && npm run copy"
+    "prepare": "npm run clean && npm run build && npm run copy",
+    "makepkg": "npm run clean && npm run build && npm pack"
   },
   "publishConfig": {
     "directory": "dist"
