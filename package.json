@@ -28,14 +28,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hololite/ozki-toolkit.git"
+    "url": "git+https://github.com/MICS-OZKi/ozki-toolkit.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/hololite/ozki-toolkit/issues"
+    "url": "https://github.com/MICS-OZKi/ozki-toolkit/issues"
   },
-  "homepage": "https://github.com/hololite/ozki-toolkit#readme",
+  "homepage": "https://github.com/MICS-OZKi/ozki-toolkit#readme",
   "dependencies": {
     "chai": "^4.3.6",
     "circomlibjs": "^0.1.2",
