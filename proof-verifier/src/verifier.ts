@@ -2,13 +2,11 @@ import * as snarkjs from "snarkjs";
 import * as fs from "fs";
 
 import { ZkUtils } from "../../common/src/";
-import db from "./ProofCacheDB";
-import { createHash } from "crypto";
+import { ProofCacheDB } from "./ProofCacheDB";
 import { MAX_PROOF_AGE } from "./config";
 import verificationKeyString from "./VerificationKey";
 
 class Verifier {
-  proofDB = db.Get();
   verifyProof = async (
     proof: string,
     publicSignals: string,
@@ -19,13 +17,9 @@ class Verifier {
     const t1 = new Date().getTime();
 
     console.log("#### checking for dup proof...");
-    const proofHash = createHash("sha256")
-      .update(JSON.stringify(proof))
-      .digest("base64");
-    const query = { hash: proofHash };
-    const result = await this.proofDB.findOne(query);
+    const result = await ProofCacheDB.getInstance().findProof(proof, publicSignals);
     if (result) {
-      console.log("#### dup proo found!");
+      console.log("#### dup proof found!");
       throw Error("Duplicate proof found. Possible replay attack!");
     }
 
@@ -70,10 +64,7 @@ class Verifier {
 
         if (res) {
           console.log("#### adding proof to cache db");
-          await this.proofDB.insertOne({
-            hash: proofHash,
-            createdAt: new Date(),
-          });
+          await ProofCacheDB.getInstance().addProof(proof, publicSignals);
         }
       const t2 = new Date().getTime();
       console.log("#### verification completed in %d ms", t2-t1);
