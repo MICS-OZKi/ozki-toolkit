@@ -8,18 +8,18 @@ fi
 circom_file=$1
 circom_file=$(basename $circom_file)	# normalize to simple relative path
 app=$(basename $circom_file ".circom")
-output_dir="./zkp/packages/"$app".out"
+output_dir="./zkp/build/"$app".out"
 
-verkey_file="./zkp/packages/"$app".out/verification_key.json"
-provkey_file="./zkp/packages/"$app".out/"$app"_0001.zkey"
-wasm_file="./zkp/packages/"$app".out/"$app"_js/"$app".wasm"
+verkey_file=$output_dir"/verification_key.json"
+provkey_file=$output_dir"/"$app"_0001.zkey"
+wasm_file=$output_dir"/"$app"_js/"$app".wasm"
 
 echo "Building "$circom_file
 
 #
 # build the circom files
 #
-cd zkp/packages
+cd zkp/build
 ../zkbuild.sh $circom_file
 cd ../..
 
