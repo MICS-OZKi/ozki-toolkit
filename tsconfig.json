@@ -10,6 +10,7 @@
     "outDir": ".",
     "rootDir": ".",
     "baseUrl": ".",
+    "sourceMap": true,
     "declaration": true,
     "strict": true,
   },
