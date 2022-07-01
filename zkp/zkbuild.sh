@@ -38,6 +38,8 @@ snarkjs powersoftau prepare phase2 pot12_0001.ptau pot12_final.ptau -v
 snarkjs groth16 setup "$app".r1cs pot12_final.ptau "$app"_0000.zkey
 echo `uuidgen` | snarkjs zkey contribute "$app"_0000.zkey "$app"_0001.zkey --name="1st Contributor Name" -v 
 snarkjs zkey export verificationkey "$app"_0001.zkey verification_key.json
+mv verification_key.json $app.json
+mv "$app"_0001.zkey $app.zkey
 cd ..
 
 

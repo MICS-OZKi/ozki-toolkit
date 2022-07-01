@@ -22,7 +22,8 @@
     "build": "tsc --build",
     "copy": "cp -r proof-generator/static/ ./dist/proof-generator/static && cp -r proof-verifier/static/ ./dist/proof-verifier/static",
     "prepare": "npm run clean && npm run build && npm run copy",
-    "makepkg": "npm run clean && npm run build && npm pack"
+    "build-circom": "./ozki-toolkit.sh zkp/build/ProvePayPalSubscriptionMain.circom",
+    "build-pkg": "npm run clean && npm run build && npm pack"
   },
   "publishConfig": {
     "directory": "dist"
