@@ -1,3 +1,5 @@
 import Generator from "./generator";
 
-export { Generator };
+const generator = new Generator();
+
+export { Generator, generator };

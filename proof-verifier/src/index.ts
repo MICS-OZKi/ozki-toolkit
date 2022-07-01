@@ -1,3 +1,5 @@
 import Verifier from "./verifier";
 
-export { Verifier };
+const verifier = new Verifier();
+
+export { Verifier, verifier };

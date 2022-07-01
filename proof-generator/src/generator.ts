@@ -6,20 +6,25 @@ const zkutils = new ZkUtils();
 
 class Generator {
   generateProof = async (
+    zkpComponentPath: string,
+    zkpComponentName: string,
     pSignature: Uint8Array,
-    subsPlanId: string,
-    subsAge: number,
     timestamp: number,
-    wasmFile: string,
-    provingKeyFile: string
+    inputObject: any
   ): Promise<[string, string]> => {
+    console.log("#### generateProof");
+    const wasmFile = `${zkpComponentPath}${zkpComponentName}.wasm`;
+    const provingKeyFile = `${zkpComponentPath}${zkpComponentName}.zkey`;
+
+    console.log("#### wasmFile=%s", wasmFile);
+    console.log("#### provingKeyFile=%s", provingKeyFile);
+
     const r8Bits = zkutils.buffer2bits(pSignature.slice(0, 32));
     const sBits = zkutils.buffer2bits(pSignature.slice(32, 64));
     const input = {
+      ...inputObject,
       sigR8: r8Bits,
       sigS: sBits, // signature
-      payment_subs_id: zkutils.stringToBytes(subsPlanId), // payment plan id
-      pa: zkutils.numberToBytes(subsAge, 4), // payment age (4 bytes)
       ts: zkutils.numberToBytes(timestamp, 4), // timestamp (4 bytes)
     };
 
@@ -33,7 +38,7 @@ class Generator {
         input,
         wasmFile,
         provingKeyFile
-      );
+      )
       const t2 = new Date().getTime();
       console.log("#### proof generation took %d ms", t2-t1);
 

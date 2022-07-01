@@ -1,5 +1,6 @@
 import * as snarkjs from "snarkjs";
 import * as fs from "fs";
+import * as path from "path";
 
 import { ZkUtils } from "../../common/src/";
 import { ProofCacheDB } from "./ProofCacheDB";
@@ -7,13 +8,15 @@ import { MAX_PROOF_AGE } from "./config";
 
 class Verifier {
   verifyProof = async (
+    zkpComponentPath: string,
+    zkpComponentName: string,
     proof: string,
-    publicSignals: string,
-    verificationKeyFilePath: string
+    publicSignals: string
   ): Promise<boolean> => {
     console.log("#### proof verification started...");
     const t1 = new Date().getTime();
 
+    const verificationKeyFilePath = `${zkpComponentPath}${zkpComponentName}.json`;
     console.log("#### checking for dup proof...");
     const result = await ProofCacheDB.getInstance().findProof(proof, publicSignals);
     if (result) {
