@@ -1,18 +1,20 @@
 import * as snarkjs from "snarkjs";
-
 import { ZkUtils } from "../../common/src/";
 
 const zkutils = new ZkUtils();
 
-class Generator {
+export default abstract class ProofGenerator {
+  constructor() {}
+
+  protected abstract getCustomInput(): any  
+
   generateProof = async (
     zkpComponentPath: string,
     zkpComponentName: string,
     pSignature: Uint8Array,
     timestamp: number,
-    inputObject: any
   ): Promise<[string, string]> => {
-    console.log("#### generateProof");
+    console.log("#### base generateProof");
     const wasmFile = `${zkpComponentPath}${zkpComponentName}.wasm`;
     const provingKeyFile = `${zkpComponentPath}${zkpComponentName}.zkey`;
 
@@ -21,8 +23,8 @@ class Generator {
 
     const r8Bits = zkutils.buffer2bits(pSignature.slice(0, 32));
     const sBits = zkutils.buffer2bits(pSignature.slice(32, 64));
-    const input = {
-      ...inputObject,
+    let input = {
+      ...this.getCustomInput(),
       sigR8: r8Bits,
       sigS: sBits, // signature
       ts: zkutils.numberToBytes(timestamp, 4), // timestamp (4 bytes)
@@ -53,5 +55,3 @@ class Generator {
     console.log("This is Generator");
   };
 }
-
-export default Generator;
