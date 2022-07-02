@@ -1,39 +1,84 @@
 #!/bin/bash
+
 tool=$(basename $0)
-if [ $# != 1 ]; then
-	echo "Usage: $tool <circom_file>"
-	exit 1
+if [ $# == 2 ]; then
+	base_output_dir=$(dirname $2)
+	circom_file=$2
+	circom_file=$(basename $circom_file)	# normalize to simple relative path
 fi
 
-circom_file=$1
-circom_file=$(basename $circom_file)	# normalize to simple relative path
-app=$(basename $circom_file ".circom")
-output_dir="./zkp/build/"$app".out"
+print_usage() {
+	echo ""
+	echo "Usage: $tool:"
+	echo "  $tool build <circom_file> # to build circom file into zkp components"
+	echo "  $tool list                # to list already built zkp components"
+	echo "  $tool clear               # to clear all zkp components"
+	echo ""
+	exit 1
+}
 
-verkey_file=$output_dir"/"$app".json"
-provkey_file=$output_dir"/"$app".zkey"
-wasm_file=$output_dir"/"$app"_js/"$app".wasm"
+do_clear() {
+	rm -f ./proof-generator/static/*
+	rm -rf ./proof-verifier/static/*
+	exit 0
+}
 
-echo "Building "$circom_file
+do_list() {
+	echo "## Proving key and wasm files:"
+	tree -C --noreport ./proof-generator/static/
+	echo ""
+	echo "## Verification files:"
+	tree -C --noreport  ./proof-verifier/static/
+	exit 0
+}
 
-#
-# build the circom files
-#
-cd zkp/build
-../zkbuild.sh $circom_file
-cd ../..
+do_build() {
+	echo "#### 1"
+	app=$(basename $circom_file ".circom")
+	output_dir=$base_output_dir"/"$app".out"
+	echo "#### 2"
+	echo $output_dir
 
-#
-# copies wasm, proving key, verifier key files to ozki-toolkit static dir
-#
-rm -f ./proof-generator/static/*
-rm -rf ./proof-verifier/static/*
-cp $provkey_file ./proof-generator/static/
-cp $wasm_file ./proof-generator/static/
-cp $verkey_file ./proof-verifier/static/
+	verkey_file=$output_dir"/"$app".json"
+	provkey_file=$output_dir"/"$app".zkey"
+	wasm_file=$output_dir"/"$app"_js/"$app".wasm"
 
-#
-# build the ozki-lib npm package
-#
+	echo "Building "$circom_file
 
+	#
+	# build the circom files
+	#
+	cd $base_output_dir
+	../zkbuild.sh $circom_file
+	cd ../..
 
+	#
+	# copies wasm, proving key, verifier key files to ozki-toolkit static dir
+	#
+	#rm -f ./proof-generator/static/*
+	#rm -rf ./proof-verifier/static/*
+	cp $provkey_file ./proof-generator/static/
+	cp $wasm_file ./proof-generator/static/
+	cp $verkey_file ./proof-verifier/static/
+	exit 0
+}
+
+if [ $# == 0 ]; then
+	print_usage
+elif [ $# == 1 ]; then
+	if [ "$1" = "list" ]; then
+		do_list
+	elif [ "$1" = "clear" ]; then
+		do_clear
+	else			
+		print_usage
+	fi
+elif [ $# == 2 ]; then
+	if [ "$1" = "build" ]; then
+		do_build
+	else			
+		print_usage
+	fi
+else
+	print_usage
+fi 

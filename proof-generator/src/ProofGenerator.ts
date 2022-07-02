@@ -1,7 +1,6 @@
 import * as snarkjs from "snarkjs";
 import { ZkUtils } from "../../common/src/";
 
-const zkutils = new ZkUtils();
 
 export default abstract class ProofGenerator<Type> {
   private zkpComponentPath: string;
@@ -16,6 +15,8 @@ export default abstract class ProofGenerator<Type> {
     this.zkpComponentName = zkpComponentName;
   }
 
+  // the subclass needs to implement this method 
+  // to format caller-specific input parameters
   protected abstract formatCustomInput(customInput: Type): any  
 
   generateProof = async (
@@ -23,28 +24,24 @@ export default abstract class ProofGenerator<Type> {
     timestamp: number,
     customInput: Type
   ): Promise<[string, string]> => {
-    console.log("#### base generateProof");
+    // form the path for the wasm and proving key files
     const wasmFile = `${this.zkpComponentPath}${this.zkpComponentName}.wasm`;
     const provingKeyFile = `${this.zkpComponentPath}${this.zkpComponentName}.zkey`;
 
-    console.log("#### wasmFile=%s", wasmFile);
-    console.log("#### provingKeyFile=%s", provingKeyFile);
-
+    // format the incoming params for circom input signals
+    const zkutils = new ZkUtils();
     const r8Bits = zkutils.buffer2bits(pSignature.slice(0, 32));
     const sBits = zkutils.buffer2bits(pSignature.slice(32, 64));
     let input = {
-      ...this.formatCustomInput(customInput),
-      sigR8: r8Bits,
-      sigS: sBits, // signature
+      ...this.formatCustomInput(customInput), // caller-specific input
+      sigR8: r8Bits,  // dsa
+      sigS: sBits,    // dsa
       ts: zkutils.numberToBytes(timestamp, 4), // timestamp (4 bytes)
     };
 
-    //
-    // running on client side:
-    //   take user's input and genreate the proof
-    //
     try {
       const t1 = new Date().getTime();
+      // create the zk-snark proof
       const { proof, publicSignals } = await snarkjs.groth16.fullProve(
         input,
         wasmFile,
