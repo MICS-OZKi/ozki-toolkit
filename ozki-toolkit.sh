@@ -9,10 +9,13 @@ fi
 
 print_usage() {
 	echo ""
-	echo "Usage: $tool:"
-	echo "  $tool build <circom_file> # to build circom file into zkp components"
-	echo "  $tool list                # to list already built zkp components"
-	echo "  $tool clear               # to clear all zkp components"
+	echo "OZKi toolkit"
+	echo "Usage: $tool <commands> [option]"
+	echo ""
+	echo "Commands:"
+	echo "  build <circom_file> # to build a circom file into zkp components"
+	echo "  list                # to list already built zkp components"
+	echo "  clear               # to clear all zkp components"
 	echo ""
 	exit 1
 }
