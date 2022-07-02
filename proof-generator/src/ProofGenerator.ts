@@ -3,20 +3,29 @@ import { ZkUtils } from "../../common/src/";
 
 const zkutils = new ZkUtils();
 
-export default abstract class ProofGenerator {
-  constructor() {}
+export default abstract class ProofGenerator<Type> {
+  private zkpComponentPath: string;
+  private zkpComponentName: string;
 
-  protected abstract getCustomInput(): any  
+  constructor(
+    zkpComponentPath: string,
+    zkpComponentName: string
+  ) 
+  {
+    this.zkpComponentPath = zkpComponentPath;
+    this.zkpComponentName = zkpComponentName;
+  }
+
+  protected abstract formatCustomInput(customInput: Type): any  
 
   generateProof = async (
-    zkpComponentPath: string,
-    zkpComponentName: string,
     pSignature: Uint8Array,
     timestamp: number,
+    customInput: Type
   ): Promise<[string, string]> => {
     console.log("#### base generateProof");
-    const wasmFile = `${zkpComponentPath}${zkpComponentName}.wasm`;
-    const provingKeyFile = `${zkpComponentPath}${zkpComponentName}.zkey`;
+    const wasmFile = `${this.zkpComponentPath}${this.zkpComponentName}.wasm`;
+    const provingKeyFile = `${this.zkpComponentPath}${this.zkpComponentName}.zkey`;
 
     console.log("#### wasmFile=%s", wasmFile);
     console.log("#### provingKeyFile=%s", provingKeyFile);
@@ -24,7 +33,7 @@ export default abstract class ProofGenerator {
     const r8Bits = zkutils.buffer2bits(pSignature.slice(0, 32));
     const sBits = zkutils.buffer2bits(pSignature.slice(32, 64));
     let input = {
-      ...this.getCustomInput(),
+      ...this.formatCustomInput(customInput),
       sigR8: r8Bits,
       sigS: sBits, // signature
       ts: zkutils.numberToBytes(timestamp, 4), // timestamp (4 bytes)
