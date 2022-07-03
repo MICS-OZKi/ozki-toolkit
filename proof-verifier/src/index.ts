@@ -1,5 +1,3 @@
-import Verifier from "./verifier";
+import ProofVerifier from "./ProofVerifier";
 
-const verifier = new Verifier();
-
-export { Verifier, verifier };
+export { ProofVerifier };
