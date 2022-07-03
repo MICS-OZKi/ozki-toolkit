@@ -6,22 +6,18 @@ include "eddsa.circom";
 include "bitify.circom";
 
 template ProvePayPalSubscription(length, eddsaLength, bitsize) {
-    // input signals
-    /*
-    signal input sigR8[256];    // ozki: must be defined
-    signal input sigS[256];     // ozki: must be defined
-    signal input payment_subs_id[length];
-    signal input pa[4];
-    signal input ts[4];         // ozki: must be defined
-    */
-    signal input sigR8[256];    // ozki: must be defined, order insensitive
-    signal input sigS[256];     // ozki: must be defined, order insensitive
-    signal input ts[4];         // ozki: must be defined, order insensitive
-    signal input payment_subs_id[length];   // additional custom input
-    signal input pa[4];                     // additional custom input
-    // output signals
-    signal output timestamp; // ozki: timestamp must be returned first
-    signal output out;
+    // input signals:
+    // ozki: sigR8, sigS, and ts: required, name sensitive, order insensitive
+    signal input sigR8[256];   // required input 
+    signal input sigS[256];    // required input
+    signal input ts[4];        // required input
+    signal input payment_subs_id[length];   // custom input
+    signal input pa[4];                     // custom input
+    // output signals:
+    // ozki: timeStamp, and constraintStatus: required, name insensitive, order sensitive
+    signal output timestamp;        // required output
+    signal output constraintStatus; // required output
+    // custom output may follow here
 
     // local vars
     var PAYPAL_SUBSCRIPTION_PERIOD = 365;   // 1 year
@@ -118,5 +114,5 @@ template ProvePayPalSubscription(length, eddsaLength, bitsize) {
     status = status * isSubsIdEqual.out;
 
     timestamp <== tmstamp;
-    out <== status;
+    constraintStatus <== status;
 }
