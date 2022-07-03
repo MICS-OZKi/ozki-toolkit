@@ -5,6 +5,11 @@ import { ZkUtils } from "../../common/src/";
 import { ProofCacheDB } from "./ProofCacheDB";
 import { MAX_PROOF_AGE } from "./config";
 
+
+export interface RequiredOutput {
+  timeStamp:        number,
+  constraintStatus: boolean
+}
 export default class ProofVerifier<Type> {
   private zkpComponentPath: string;
   private zkpComponentName: string;
@@ -15,6 +20,16 @@ export default class ProofVerifier<Type> {
   ) {
     this.zkpComponentPath = zkpComponentPath;
     this.zkpComponentName = zkpComponentName;
+  }
+
+  protected parseRequiredOutput(output: Array<string>): RequiredOutput {
+    // the corresponding circom output signal must follow this order (name-insensitive):
+    // - timeStamp
+    // - constraintStatus
+    const [timeStamp, constraintStatus] = output;
+    let ts = Number.parseInt(timeStamp);
+    let cs = Number.parseInt(constraintStatus);
+    return {timeStamp: ts, constraintStatus: (cs == 1)};
   }
 
   protected parseCustomOutput(output: Array<string>): Type|null {
@@ -54,17 +69,15 @@ export default class ProofVerifier<Type> {
 
     if (res) {
       // fail the proof if it's older than maxProoAge
-      const [timeStamp, constraintStatus] = output;
-      let ts = Number.parseInt(timeStamp);
+      const requiredOutput = this.parseRequiredOutput(output);
       let now = Math.floor(new Date().getTime() / 1000);
       console.log("#### checking timestamp for proof age");
-      if (now - ts > MAX_PROOF_AGE * 60) {
+      if (now - requiredOutput.timeStamp > MAX_PROOF_AGE * 60) {
         console.log("#### proof has expired!");
         throw Error("Proof has expired!");
       } 
       else {
-        let status = Number.parseInt(constraintStatus);
-        res = (status == 1) ? true : false;
+        res = requiredOutput.constraintStatus;
         if (res) {
           console.log("#### adding proof to cache db");
           await ProofCacheDB.getInstance().addProof(proof, output.toString());
