@@ -1,7 +1,7 @@
 {
   "name": "ozki-lib",
   "private": true,
-  "version": "1.1.5",
+  "version": "1.1.7",
   "description": "ozki-lib zkp project",
   "main": "index.js",
   "types": "index.d.ts",

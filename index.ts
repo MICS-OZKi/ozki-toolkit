@@ -1,5 +1,6 @@
 import ProofGenerator from "./dist/proof-generator/src/ProofGenerator";
-import { ZkUtils, zkutils } from "./dist/common/src";
+import ProofVerifier from "./dist/proof-verifier/src/ProofVerifier";
+import { ZkUtils } from "./dist/common/src";
 
-export default ProofGenerator;
-export { ZkUtils, zkutils };
+export default ProofVerifier ;
+export { ProofGenerator, ZkUtils };
