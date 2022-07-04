@@ -17,9 +17,9 @@ export default abstract class ProofGenerator<Type> {
 
   // the subclass needs to implement this method 
   // to format caller-specific input parameters
-  protected abstract formatCustomInput(customInput: Type): any  
+  protected abstract formatCustomInput(customInput: Type): object
 
-  protected formatRequiredInput(signature: Uint8Array, timeStamp: number): any {
+  protected formatRequiredInput(signature: Uint8Array, timeStamp: number): object {
     const zkutils = new ZkUtils();
     return { 
       sigR8: zkutils.buffer2bits(signature.slice(0, 32)),
