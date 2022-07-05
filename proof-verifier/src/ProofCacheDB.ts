@@ -10,7 +10,6 @@ export class ProofCacheDB {
   private static instance: ProofCacheDB;
   private static initialized = false; 
   private db: any = null;
-  private collection: any = null;
 
   static getInstance(): ProofCacheDB {
     if (!ProofCacheDB.initialized) {
@@ -31,13 +30,16 @@ export class ProofCacheDB {
     publicSignals: string
   ): Promise<boolean> => {
     let result = false;
-    //console.log(">> findProof()");
+    console.log(">> findProof");
     const proofHash = createHash("sha256")
-      .update(JSON.stringify(proof))
+      .update(proof + publicSignals)
       .digest("base64");
     const query = { hash: proofHash };
-    result = await this.collection.findOne(query);
-    //console.log("<< findProof()");
+    console.log("hash=%s", proofHash.toString())
+    const coll = this.db.collection(DB_COLLECTION_NAME);
+    result = await coll.findOne(query);
+    console.log("result=%s", result);
+    console.log("<< findProof");
     return result;
   }
 
@@ -45,17 +47,18 @@ export class ProofCacheDB {
     proof: string,
     publicSignals: string
   ): Promise<void> => {
-    //console.log(">> addProof()");
+    console.log(">> addProof");
     const proofHash = createHash("sha256")
-      .update(JSON.stringify(proof))
+      .update(proof + publicSignals)
       .digest("base64");
-    const query = { hash: proofHash };
 
-    await this.collection.insertOne({
-      query,
+    console.log("hash=%s", proofHash.toString())
+    const coll = this.db.collection(DB_COLLECTION_NAME);
+    await coll.insertOne({
+      hash: proofHash,
       createdAt: new Date(),
     });
-    //console.log("<< addProof()");
+    console.log("<< addProof");
   }
 
   private connectToDatabase() {
@@ -65,10 +68,10 @@ export class ProofCacheDB {
       const database = client.db(DB_NAME);
       console.log(`#### connected to db: ${database.databaseName}`);
       this.db = database;
-      this.collection = this.db.collection(DB_COLLECTION_NAME);
+      const coll = this.db.collection(DB_COLLECTION_NAME);
 
       try {
-        this.collection.createIndex(
+        coll.createIndex(
           { createdAt: 1 },
           {
             name: "Automatic Expired",
@@ -82,7 +85,6 @@ export class ProofCacheDB {
       }
     }
     else {
-      this.collection = this.db.collection(DB_COLLECTION_NAME);
       console.log("#### collection retrieved");
     }
   }

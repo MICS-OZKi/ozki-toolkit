@@ -1,7 +1,7 @@
 {
   "name": "ozki-lib",
   "private": true,
-  "version": "1.1.7",
+  "version": "1.1.27",
   "description": "ozki-lib zkp project",
   "main": "index.js",
   "types": "index.d.ts",
@@ -32,8 +32,8 @@
     "type": "git",
     "url": "git+https://github.com/MICS-OZKi/ozki-toolkit.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Antony Halim (a-ha@berkeley.edu)",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/MICS-OZKi/ozki-toolkit/issues"
   },
