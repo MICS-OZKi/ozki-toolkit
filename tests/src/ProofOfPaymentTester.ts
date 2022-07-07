@@ -23,45 +23,47 @@ class PayPalOracleData extends OracleData<SubscriptionData> {
 
 async function main() {
   console.log("testing ProofOfPayment....");
-
-  let zkpComponentPath = "../proof-generator/static/";
   const zkpComponentName = "ProvePayPalSubscriptionMain";
 
+  //
+  // oracle-side processing
+  //
+  // oracle's private siging key
+  const signingKey = '0001020304050607080900010203040506070809000102030405060708090001';
   // the PII - from PayPal
   let subsId = "P-1BF08962SE3742350MKRYCVQ";
   let paymentAge = 10;
   // the current timestamp
   let timeStamp = Math.floor((new Date()).getTime() / 1000);
-
   const subsData: SubscriptionData = {
     subsPlanID:           subsId,
     subsAge:              paymentAge
   };
-
   const oracleData = new PayPalOracleData();
-  const sig = await oracleData.sign(
-    '0001020304050607080900010203040506070809000102030405060708090001', // oracle's private siging key
-    timeStamp,
-    subsData
-  );
+  const sig = await oracleData.sign(signingKey, timeStamp, subsData);
 
+  //
+  // browser-side processing
+  //
+  let zkpComponentPath = "../proof-generator/static/";
   const generator = new ProofOfPaymentGenerator(zkpComponentPath, zkpComponentName);
   const [proof, publicSignals] = await generator.generateProof(
     Uint8Array.from(sig),
     timeStamp,
     subsData
   );
-
   console.log("Proof:");
   console.log(proof);
   console.log("Output:");
   console.log(publicSignals);
 
+  //
+  // server-side processing
+  //
   zkpComponentPath = "../proof-verifier/static/";
   const verifier = new ProofOfPaymentVerifier(zkpComponentPath, zkpComponentName);
   const output = JSON.parse(JSON.stringify(publicSignals));
   const proofOutput = [output[0], output[1]];
-
   //console.log("sleeping... ");
   //await delay(4*60*1000);
   console.log("starting verification... ");
