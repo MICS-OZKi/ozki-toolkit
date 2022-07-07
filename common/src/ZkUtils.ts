@@ -45,6 +45,20 @@ class ZkUtils {
     return s;
   };
 
+  normalizeAuthInputForHash = (domain: string, ts: number): number[] => {
+    // s is a fixed array of 20 numbers
+    // a is a number
+    // the serialized data is s appended with a, resulting in array of 21 numbers
+    let data = this.stringToBytes(domain);
+
+    let bytes = this.numberToBytes(ts, 4);
+    for (var i = 0; i < 4; i++) {
+      data.push(bytes[i]);
+    }
+
+    return data;
+  };
+
   normalizeInputForHash = (s: string, age: number, ts: number): number[] => {
     // s is a fixed array of 20 numbers
     // a is a number

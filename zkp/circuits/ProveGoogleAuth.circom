@@ -16,12 +16,13 @@ template ProveGoogleAuth(length, eddsaLength, bitsize) {
 
     // local vars
     // The expected google domain
-    var EMAIL_DOMAIN_LENGTH = 9; 
-    var EMAIL_DOMAIN[EMAIL_DOMAIN_LENGTH] = [  // "google.com"
-	  103, 109, 97, 105,
-	  108,  46, 99, 111,
-	  109
+    var EMAIL_DOMAIN_LENGTH = 12; 
+    var EMAIL_DOMAIN[EMAIL_DOMAIN_LENGTH] = [  // "berkeley.edu"
+	   98, 101, 114, 107,
+	  101, 108, 101, 121,
+	   46, 101, 100, 117
 	];
+
 
 
     // The oracle's digital signature verification key
