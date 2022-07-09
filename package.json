@@ -1,8 +1,8 @@
 {
-  "name": "ozki-lib",
+  "name": "ozki-toolkit",
   "private": true,
-  "version": "1.1.30",
-  "description": "ozki-lib zkp project",
+  "version": "1.2.0",
+  "description": "ozki-toolkit library npm package",
   "main": "index.js",
   "types": "index.d.ts",
   "type": "commonjs",

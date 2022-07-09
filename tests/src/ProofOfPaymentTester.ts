@@ -6,7 +6,7 @@ import { buildBabyjub } from "circomlibjs";
 import { ProofOfPaymentGenerator } from "./ProofOfPaymentGenerator.js";
 import { SubscriptionData } from "./ProofOfPaymentGenerator";
 import { ProofOfPaymentVerifier } from "./ProofOfPaymentVerifier";
-import { ZkUtils, OracleData } from "ozki-lib";
+import { ZkUtils, OracleData } from "ozki-toolkit";
 
 function delay(milliseconds : number) {
     return new Promise(resolve => setTimeout( resolve, milliseconds));

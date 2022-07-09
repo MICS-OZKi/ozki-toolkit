@@ -36,11 +36,9 @@ do_list() {
 }
 
 do_build() {
-	echo "#### 1"
 	app=$(basename $circom_file ".circom")
 	output_dir=$base_output_dir"/"$app".out"
-	echo "#### 2"
-	echo $output_dir
+	echo Creating $output_dir
 
 	verkey_file=$output_dir"/"$app".json"
 	provkey_file=$output_dir"/"$app".zkey"

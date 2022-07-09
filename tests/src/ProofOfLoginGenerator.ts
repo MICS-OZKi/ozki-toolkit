@@ -1,4 +1,4 @@
-import {ProofGenerator, ZkUtils} from "ozki-lib";
+import {ProofGenerator, ZkUtils} from "ozki-toolkit";
 
 export interface LoginInfo {
   domain:           string;

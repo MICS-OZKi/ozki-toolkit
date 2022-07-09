@@ -1,6 +1,6 @@
 import { ProofOfLoginGenerator, LoginInfo } from "./ProofOfLoginGenerator.js";
 import { ProofOfLoginVerifier } from "./ProofOfLoginVerifier";
-import { ZkUtils, OracleData } from "ozki-lib";
+import { ZkUtils, OracleData } from "ozki-toolkit";
 
 function delay(milliseconds : number) {
     return new Promise(resolve => setTimeout( resolve, milliseconds));

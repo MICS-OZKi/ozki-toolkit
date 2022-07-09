@@ -1,4 +1,4 @@
-import  ProofVerifier from "ozki-lib";
+import  ProofVerifier from "ozki-toolkit";
 
 export class ProofOfLoginVerifier extends ProofVerifier<void> {
     constructor(
