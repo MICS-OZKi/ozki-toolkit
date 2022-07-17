@@ -1,9 +1,9 @@
 {
-  "name": "a-ha",
+  "name": "ozki-toolkit unit tester",
   "version": "1.0.0",
   "description": "test",
   "type": "commonjs",
-  "main": "a-ha.js",
+  "main": "index.js",
   "scripts": {
     "setup": "npm install; npm run zkbuild",
     "generate_is_subscription_good": "../zkbuild.sh is_subscription_good.circom;",
@@ -21,7 +21,7 @@
   "license": "ISC",
   "dependencies": {
     "chai": "^4.3.6",
-    "ozki-toolkit": "file:../ozki-toolkit-1.2.0.tgz",
+    "ozki-toolkit": "file:../ozki-toolkit-1.2.2.tgz",
     "snarkjs": "^0.4.18",
     "typescript": "^4.7.2"
   },

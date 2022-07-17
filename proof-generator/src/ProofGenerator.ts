@@ -21,11 +21,22 @@ export default abstract class ProofGenerator<Type> {
 
   protected formatRequiredInput(signature: Uint8Array, timeStamp: number): object {
     const zkutils = new ZkUtils();
-    return { 
-      sigR8: zkutils.buffer2bits(signature.slice(0, 32)),
-      sigS: zkutils.buffer2bits(signature.slice(32, 64)),
-      ts: zkutils.numberToBytes(timeStamp, 4) // timestamp (4 bytes)
+    let obj: object;
+
+    if (signature.length) {
+      obj = {
+        sigR8: zkutils.buffer2bits(signature.slice(0, 32)),
+        sigS: zkutils.buffer2bits(signature.slice(32, 64)),
+        ts: zkutils.numberToBytes(timeStamp, 4) // timestamp (4 bytes)
+      }
+
     }
+    else {
+      obj = {
+        ts: zkutils.numberToBytes(timeStamp, 4) // timestamp (4 bytes)
+      }
+    }
+    return obj;
   }
 
   generateProof = async (

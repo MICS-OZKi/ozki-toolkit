@@ -5,8 +5,7 @@ import { ZkUtils } from "../../common/src/";
 import { ProofCacheDB } from "./ProofCacheDB";
 import { MAX_PROOF_AGE } from "./config";
 
-
-export interface RequiredOutput {
+export interface ProofRequiredOutput {
   timeStamp:        number,
   constraintStatus: boolean
 }
@@ -22,7 +21,7 @@ export default class ProofVerifier<Type> {
     this.zkpComponentName = zkpComponentName;
   }
 
-  protected parseRequiredOutput(output: Array<string>): RequiredOutput {
+  protected parseRequiredOutput(output: Array<string>): ProofRequiredOutput {
     // the corresponding circom output signal must follow this order (name-insensitive):
     // - timeStamp
     // - constraintStatus
