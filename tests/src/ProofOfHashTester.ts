@@ -25,10 +25,8 @@ async function main() {
   // browser-side processing
   //
   let zkpComponentPath = "../proof-generator/static/";
-  let noSig = new Uint8Array(); // no signature used
   const generator = new ProofOfHashGenerator(zkpComponentPath, zkpComponentName);
   const [proof, publicSignals] = await generator.generateProof(
-    noSig,
     timeStamp,
     input
   );

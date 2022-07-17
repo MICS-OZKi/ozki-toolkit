@@ -1,5 +1,5 @@
 {
-  "name": "ozki-toolkit unit tester",
+  "name": "ozki-toolkit-unit-tester",
   "version": "1.0.0",
   "description": "test",
   "type": "commonjs",
@@ -21,7 +21,7 @@
   "license": "ISC",
   "dependencies": {
     "chai": "^4.3.6",
-    "ozki-toolkit": "file:../ozki-toolkit-1.2.2.tgz",
+    "ozki-toolkit": "file:../ozki-toolkit-1.2.6.tgz",
     "snarkjs": "^0.4.18",
     "typescript": "^4.7.2"
   },

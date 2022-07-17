@@ -1,4 +1,4 @@
-import {ProofGenerator, ZkUtils} from "ozki-toolkit";
+import {ProofGenerator, UnsignedProofGenerator, ZkUtils} from "ozki-toolkit";
 
 // api-facing param object
 export interface AnswerInfo {
@@ -6,7 +6,7 @@ export interface AnswerInfo {
   answerString:        string;
 }
 
-export class ProofOfHashGenerator extends ProofGenerator<AnswerInfo> {
+export class ProofOfHashGenerator extends UnsignedProofGenerator<AnswerInfo> {
     constructor(
         zkpComponentPath: string,
         zkpComponentName: string
