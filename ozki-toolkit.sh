@@ -30,7 +30,7 @@ do_list() {
 	echo "## Proving key and wasm files:"
 	tree -C --noreport ./proof-generator/static/
 	echo ""
-	echo "## Verification files:"
+	echo "## Verification key files:"
 	tree -C --noreport  ./proof-verifier/static/
 	exit 0
 }
