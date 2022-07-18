@@ -22,9 +22,11 @@ async function main() {
   };
 
   //
-  // browser-side processing
+  // Browser/client-side processing
+  // Note that the browser cannot access node_modules due to sandboxed env.
+  // For the browser, the zkp components files will need to be hosted as static contents on the server
   //
-  let zkpComponentPath = "../proof-generator/static/";
+  let zkpComponentPath = "node_modules/ozki-toolkit/dist/proof-generator/static/";
   const generator = new ProofOfHashGenerator(zkpComponentPath, zkpComponentName);
   const [proof, publicSignals] = await generator.generateProof(
     timeStamp,
@@ -38,7 +40,7 @@ async function main() {
   //
   // server-side processing
   //
-  zkpComponentPath = "../proof-verifier/static/";
+  zkpComponentPath = "node_modules/ozki-toolkit/dist/proof-verifier/static/";
   const verifier = new ProofOfHashVerifier(zkpComponentPath, zkpComponentName);
   const output = JSON.parse(JSON.stringify(publicSignals));
   //console.log("sleeping... ");

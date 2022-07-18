@@ -1,6 +1,10 @@
 pragma circom 2.0.0;
 include "mimcsponge.circom";
 
+//
+// Note: this circom program needs powersoftau with 17-bit
+//
+
 template GetAnswerHash(length) {
     var output_length = length*4/3;
 

@@ -36,9 +36,11 @@ async function main() {
   );
 
   //
-  // browser-side processing
+  // Browser/client-side processing
+  // Note that the browser cannot access node_modules due to sandboxed env.
+  // For the browser, the zkp components files will need to be hosted as static contents on the server
   //
-  let zkpComponentPath = "../proof-generator/static/";
+  let zkpComponentPath = "node_modules/ozki-toolkit/dist/proof-generator/static/";
   const generator = new ProofOfLoginGenerator(zkpComponentPath, zkpComponentName);
   const [proof, publicSignals] = await generator.generateProof(
     Uint8Array.from(sig),
@@ -51,9 +53,9 @@ async function main() {
   console.log(publicSignals);
 
   //
-  // server-side processing
+  // Server-side processing
   //
-  zkpComponentPath = "../proof-verifier/static/";
+  zkpComponentPath = "node_modules/ozki-toolkit/dist/proof-verifier/static/";
   const verifier = new ProofOfLoginVerifier(zkpComponentPath, zkpComponentName);
   const output = JSON.parse(JSON.stringify(publicSignals));
   const proofOutput = [output[0], output[1]];
