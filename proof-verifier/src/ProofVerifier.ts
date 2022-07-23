@@ -42,6 +42,7 @@ export default class ProofVerifier<Type> {
     console.log("#### proof verification started...");
     const t1 = new Date().getTime();
 
+    // check proof dup in DB
     const verificationKeyFilePath = `${this.zkpComponentPath}${this.zkpComponentName}.json`;
     console.log("#### checking for dup proof...");
     const result = await ProofCacheDB.getInstance().findProof(proof, output.toString());
@@ -50,12 +51,11 @@ export default class ProofVerifier<Type> {
       throw Error("Duplicate proof found. Possible replay attack!");
     }
 
-    // verify the proof and output
+    // check zk-snark verification
+    console.log("#### calling groth16.verify...");
     const verificationKey = JSON.parse(
       fs.readFileSync(verificationKeyFilePath).toString()
     );
-
-    console.log("#### calling groth16.verify...");
     let res;
     try {
       res = await snarkjs.groth16.verify(verificationKey, output, proof);
@@ -65,35 +65,30 @@ export default class ProofVerifier<Type> {
       console.log(error);
       throw Error("Proof verification failed");
     }
-
-    if (res) {
-      // fail the proof if it's older than maxProoAge
-      const requiredOutput = this.parseRequiredOutput(output);
-      let now = Math.floor(new Date().getTime() / 1000);
-      console.log("#### checking timestamp for proof age");
-      if (now - requiredOutput.timeStamp > MAX_PROOF_AGE * 60) {
-        console.log("#### proof has expired!");
-        throw Error("Proof has expired!");
-      } 
-      else {
-        res = requiredOutput.constraintStatus;
-        if (res) {
-          console.log("#### adding proof to cache db");
-          await ProofCacheDB.getInstance().addProof(proof, output.toString());
-        }
-        const t2 = new Date().getTime();
-        console.log("#### proof verification completed in %d ms", t2-t1);
-      }
-    }
-    else {
+    if (!res) {
       console.log("#### groth16.verify failed");
       throw Error("The call to groth16.verify failed.");
     }
 
-    return this.parseCustomOutput(output);
-  };
+    // check proof TTL
+    const requiredOutput = this.parseRequiredOutput(output);
+    let now = Math.floor(new Date().getTime() / 1000);
+    console.log("#### checking timestamp for proof age");
+    if (now - requiredOutput.timeStamp > MAX_PROOF_AGE * 60) {
+      console.log("#### proof has expired!");
+      throw Error("Proof has expired!");
+    } 
 
-  printVerifier = () => {
-    new ZkUtils().print("This is Verifier");
+    // check constraint status
+    if (!requiredOutput.constraintStatus) {
+      console.log("#### constraint status is false!");
+      throw Error("The contraint status is false!");
+    }
+
+    console.log("#### adding proof to cache db");
+    await ProofCacheDB.getInstance().addProof(proof, output.toString());
+    const t2 = new Date().getTime();
+    console.log("#### proof verification completed in %d ms", t2-t1);
+    return this.parseCustomOutput(output);
   };
 }
