@@ -32,7 +32,7 @@
     "type": "git",
     "url": "git+https://github.com/MICS-OZKi/ozki-toolkit.git"
   },
-  "author": "a-ha@berkeley.edu, mariah.martinez@berkeley.edu",
+  "author": "a-ha@berkeley.edu",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/MICS-OZKi/ozki-toolkit/issues"
