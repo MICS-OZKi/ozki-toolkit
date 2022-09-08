@@ -6,6 +6,7 @@ zkp/**/verification_key.json
 *.out/
 *.r1cs
 *.sym
+*.ptau
 node_modules/
 build/
 dist/

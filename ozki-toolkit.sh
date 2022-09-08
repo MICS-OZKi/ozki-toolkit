@@ -45,6 +45,12 @@ do_build() {
 	wasm_file=$output_dir"/"$app"_js/"$app".wasm"
 
 	echo "Building "$circom_file
+	#
+	# zkp setup
+	#
+	cd zkp
+	./univ-setup.sh 17
+	cd ..
 
 	#
 	# build the circom files

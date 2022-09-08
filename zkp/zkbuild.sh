@@ -29,17 +29,18 @@ if [ $? != "0" ]; then
     exit 1
 fi
 
-# perform ceremony & generate the verification key
-#snarkjs powersoftau new bn128 12 pot12_0000.ptau -v
+
 cd $output_dir
-snarkjs powersoftau new bn128 14 pot12_0000.ptau -v
-echo `uuidgen` | snarkjs powersoftau contribute pot12_0000.ptau pot12_0001.ptau --name="First contribution" -v 
-snarkjs powersoftau prepare phase2 pot12_0001.ptau pot12_final.ptau -v
-snarkjs groth16 setup "$app".r1cs pot12_final.ptau "$app"_0000.zkey
+
+# perform ceremony & generate the verification key
+ptau_dir="../../ptau"
+ptau_file=$ptau_dir"/ozki.ptau"
+snarkjs groth16 setup "$app".r1cs $ptau_file "$app"_0000.zkey
 echo `uuidgen` | snarkjs zkey contribute "$app"_0000.zkey "$app"_0001.zkey --name="1st Contributor Name" -v 
-snarkjs zkey export verificationkey "$app"_0001.zkey verification_key.json
-mv verification_key.json $app.json
-mv "$app"_0001.zkey $app.zkey
+snarkjs zkey export verificationkey "$app"_0001.zkey "$app".json
+snarkjs zkey export solidityverifier "$app"_0001.zkey "$app".sol
+# copy zkey
+cp "$app"_0001.zkey $app.zkey
 cd ..
 
 
