@@ -52,22 +52,22 @@ export default class ProofVerifier<Type> {
     }
 
     // check zk-snark verification
-    console.log("#### calling groth16.verify...");
+    console.log("#### calling plonk.verify...");
     const verificationKey = JSON.parse(
       fs.readFileSync(verificationKeyFilePath).toString()
     );
     let res;
     try {
-      res = await snarkjs.groth16.verify(verificationKey, output, proof);
+      res = await snarkjs.plonk.verify(verificationKey, output, proof);
     }
     catch (error) {
-      console.log("#### groth16.verify failed");
+      console.log("#### plonk.verify failed");
       console.log(error);
       throw Error("Proof verification failed");
     }
     if (!res) {
-      console.log("#### groth16.verify failed");
-      throw Error("The call to groth16.verify failed.");
+      console.log("#### plonk.verify failed");
+      throw Error("The call to plonk.verify failed.");
     }
 
     // check proof TTL

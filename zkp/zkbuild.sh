@@ -1,4 +1,5 @@
 #!/bin/bash
+
 tool=$(basename $0)
 if [ $# != 1 ]; then
 	echo "Usage: $tool <circom_file>"
@@ -22,7 +23,10 @@ fi
 # create a new output dir
 mkdir $output_dir
 
+#
 # run circom compiler on the .circom file
+#
+echo "Compiling circom program into witness-calculating .wasm module"
 circom $circom_file --r1cs --wasm --sym --c --output $output_dir
 if [ $? != "0" ]; then
     echo "circom failed"
@@ -30,17 +34,22 @@ if [ $? != "0" ]; then
 fi
 
 
+#
+# with plonk, now it's no longer necessary to perform per-app trusted setup
+#
 cd $output_dir
-
-# perform ceremony & generate the verification key
 ptau_dir="../../ptau"
 ptau_file=$ptau_dir"/ozki.ptau"
-snarkjs groth16 setup "$app".r1cs $ptau_file "$app"_0000.zkey
-echo `uuidgen` | snarkjs zkey contribute "$app"_0000.zkey "$app"_0001.zkey --name="1st Contributor Name" -v 
-snarkjs zkey export verificationkey "$app"_0001.zkey "$app".json
-snarkjs zkey export solidityverifier "$app"_0001.zkey "$app".sol
+#
+# generate the proving key
+#
+snarkjs plonk setup "$app".r1cs $ptau_file "$app"_0000.zkey
+#echo `uuidgen` | snarkjs zkey contribute "$app"_0000.zkey "$app"_0001.zkey --name="1st Contributor Name" -v 
+#
+# generate the verification key
+#
+snarkjs zkey export verificationkey "$app"_0000.zkey "$app".json
+snarkjs zkey export solidityverifier "$app"_0000.zkey "$app".sol
 # copy zkey
-cp "$app"_0001.zkey $app.zkey
+cp "$app"_0000.zkey $app.zkey
 cd ..
-
-

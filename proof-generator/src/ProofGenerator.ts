@@ -27,7 +27,7 @@ export abstract class BaseProofGenerator<Type> {
     try {
       const t1 = new Date().getTime();
       // create the zk-snark proof
-      const {proof, publicSignals} = await snarkjs.groth16.fullProve(
+      const {proof, publicSignals} = await snarkjs.plonk.fullProve(
         input,
         wasmFile,
         provingKeyFile
